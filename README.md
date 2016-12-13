@@ -26,6 +26,6 @@ document.body.onselectstart=document.body.ondrag=function(){
 
 [在线demo https://guguji5.github.io/bs-modal-dragable/bs-modal-dragable.html](https://guguji5.github.io/bs-modal-dragable/bs-modal-dragable.html)
 根据我们项目中的情况，让他在content区域拖动，加了个**碰撞检测**，即将区域的边界根据实际情况来编写。
-![这里写图片描述](http://img.blog.csdn.net/20161213194816207?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmFpZHVfMzU0MDcyNjc=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![这里写图片描述](https://github.com/guguji5/bs-modal-dragable/tree/gh-pages/bs-modal-dragable.gif)
 
 [下载demo自己调整 https://github.com/guguji5/bs-modal-dragable](https://github.com/guguji5/bs-modal-dragable)
