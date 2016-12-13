@@ -1,0 +1,141 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />    
+        <script src="http://cdn.bootcss.com/jquery/1.12.1/jquery.js"></script>
+        <script src='http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.js'></script>
+        <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.0.2/css/bootstrap.css">
+        <style type="text/css">
+            .select{
+                -moz-user-select:none;/*火狐*/
+                -webkit-user-select:none;/*webkit浏览器*/
+                -ms-user-select:none;/*IE10*/
+                -khtml-user-select:none;/*早期浏览器*/
+                user-select:none;
+                }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <table class="table table-bordered">
+              <thead>
+                  <th>id</th>
+                  <th>name</th>
+                  <th>age</th>
+                  <th>job</th>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td>1</td>
+                      <td>guguji</td>
+                      <td>26</td>
+                      <td>developer</td>
+                  </tr>
+                  <tr>
+                      <td>2</td>
+                      <td>qinling</td>
+                      <td>25</td>
+                      <td>insurance saler</td>
+                  </tr>
+                  <tr>
+                      <td>3</td>
+                      <td>li ke</td>
+                      <td>24</td>
+                      <td>human reource</td>
+                  </tr>
+              </tbody>
+            </table>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+              Launch demo modal
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                  </div>
+                  <div class="modal-body">
+                    this is the modal-body areas
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+    </body>
+    <script>
+
+        /** 拖拽模态框*/ 
+        var dragModal={
+            mouseStartPoint:{"left":0,"top":  0},
+            mouseEndPoint : {"left":0,"top":  0},
+            mouseDragDown : false,
+            basePoint : {"left":0,"top":  0},
+            moveTarget:null,
+            topleng:0
+        }
+        $(document).on("mousedown",".modal-header",function(e){
+            //webkit内核和火狐禁止文字被选中
+            $('body').addClass('select')
+            //ie浏览器禁止文字选中
+            document.body.onselectstart=document.body.ondrag=function(){
+                return false;
+                }
+            if($(e.target).hasClass("close"))//点关闭按钮不能移动对话框  
+                return;  
+            dragModal.mouseDragDown = true;  
+            dragModal.moveTarget = $(this).parent().parent();         
+            dragModal.mouseStartPoint = {"left":e.clientX,"top":  e.pageY};  
+            dragModal.basePoint = dragModal.moveTarget.offset();  
+            dragModal.topLeng=e.pageY-e.clientY;
+        });  
+        $(document).on("mouseup",function(e){       
+            dragModal.mouseDragDown = false;  
+            dragModal.moveTarget = undefined;  
+            dragModal.mouseStartPoint = {"left":0,"top":  0};  
+            dragModal.basePoint = {"left":0,"top":  0};  
+        });  
+        $(document).on("mousemove",function(e){  
+            if(!dragModal.mouseDragDown || dragModal.moveTarget == undefined)return;          
+            var mousX = e.clientX;  
+            var mousY = e.pageY;  
+            if(mousX < 0)mousX = 0;  
+            if(mousY < 0)mousY = 25;  
+            dragModal.mouseEndPoint = {"left":mousX,"top": mousY};  
+            var width = dragModal.moveTarget.width();  
+            var height = dragModal.moveTarget.height();
+            var clientWidth=document.body.clientWidth
+            var clientHeight=document.body.clientHeight;
+            if(dragModal.mouseEndPoint.left<dragModal.mouseStartPoint.left - dragModal.basePoint.left){
+                dragModal.mouseEndPoint.left=0;
+            }
+            else if(dragModal.mouseEndPoint.left>=clientWidth-width+dragModal.mouseStartPoint.left - dragModal.basePoint.left){
+                dragModal.mouseEndPoint.left=clientWidth-width-38;
+            }else{
+                dragModal.mouseEndPoint.left =dragModal.mouseEndPoint.left-(dragModal.mouseStartPoint.left - dragModal.basePoint.left);//移动修正，更平滑  
+                
+            }
+            if(dragModal.mouseEndPoint.top-(dragModal.mouseStartPoint.top - dragModal.basePoint.top)<dragModal.topLeng){
+                dragModal.mouseEndPoint.top=dragModal.topLeng;
+            }else if(dragModal.mouseEndPoint.top-dragModal.topLeng>clientHeight-height+dragModal.mouseStartPoint.top - dragModal.basePoint.top){
+                dragModal.mouseEndPoint.top=clientHeight-height-38+dragModal.topLeng;
+            }
+            else{
+                dragModal.mouseEndPoint.top = dragModal.mouseEndPoint.top - (dragModal.mouseStartPoint.top - dragModal.basePoint.top);           
+            }
+            dragModal.moveTarget.offset(dragModal.mouseEndPoint);  
+        });   
+        $(document).on('hidden.bs.modal','.modal',function(e){
+            $('.modal-dialog').css({'top': '0px','left': '0px'})
+            $('body').removeClass('select')
+            document.body.onselectstart=document.body.ondrag=null;
+        })
+	</script>
+</html>
